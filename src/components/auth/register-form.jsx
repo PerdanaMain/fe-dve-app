@@ -1,7 +1,13 @@
-import { cn } from "../../lib/utils";
-import { Button } from "../ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { Loader2Icon } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import toast, { Toaster } from "react-hot-toast";
+import { cn } from "../../lib/utils";
+import { register } from "../../services/auth.service";
 import { registerSchema } from "../../utils/schema";
+import { Button } from "../ui/button";
 import {
   Card,
   CardContent,
@@ -11,14 +17,10 @@ import {
 } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
-import { register } from "../../services/auth.service";
-import { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
 
 const RegisterForm = ({ className, ...props }) => {
   const [registrationData, setRegistrationData] = useState(null);
+  const [isLoading, setIsloading] = useState(false);
   const {
     register: formRegistration,
     handleSubmit,
@@ -33,14 +35,14 @@ const RegisterForm = ({ className, ...props }) => {
 
   const onSubmit = async (data) => {
     try {
+      setIsloading(!isLoading);
       setRegistrationData(data);
-      console.log(registrationData);
 
       await mutateAsync();
       toast.success("Register succesfully, wait for admin approve!");
     } catch (error) {
-      console.log(error)
-      toast.error(error.message);
+      setIsloading(false);
+      toast.error(error.response.data.message);
     }
   };
 
@@ -118,10 +120,23 @@ const RegisterForm = ({ className, ...props }) => {
                 )}
               </div>
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full">
-                  Register
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <Loader2Icon className="animate-spin" />
+                      Please wait
+                    </>
+                  ) : (
+                    "Register"
+                  )}
                 </Button>
               </div>
+            </div>
+            <div className="mt-4 text-center text-sm">
+              Already have an account? {" "}
+              <a href="/" className="underline underline-offset-4">
+                sign in
+              </a>
             </div>
           </form>
         </CardContent>
