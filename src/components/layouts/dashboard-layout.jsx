@@ -10,6 +10,7 @@ import {
 import { Separator } from "../ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "../ui/sidebar";
 import { Outlet } from "react-router-dom";
+import { ModeToggle } from "../mode-toggle";
 
 const DashboardLayout = () => {
   return (
@@ -25,16 +26,16 @@ const DashboardLayout = () => {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">
-                  Building Your Application
-                </BreadcrumbLink>
+                <BreadcrumbLink href="#">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                <BreadcrumbPage>Equipments</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
+          <div className="flex-1" />
+          <ModeToggle />
         </header>
         <Outlet />
       </SidebarInset>

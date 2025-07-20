@@ -5,3 +5,10 @@ export const register = async (data) =>
 
 export const login = async (data) =>
   await apiInstance.post("/auth/login", data).then((res) => res.data);
+
+export const verifyUser = async (token) =>
+  await apiInstance.get("/auth/me", {
+    headers:{
+      Authorization:`Bearer ${token}`
+    }
+  }).then((res) => res.data);

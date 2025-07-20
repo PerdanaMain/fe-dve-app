@@ -1,11 +1,11 @@
 export const sidebarList = {
   navMain: [
     {
-      title: "Tools",
+      title: "Equipments",
       url: "#",
       items: [
         {
-          title: "Equipments",
+          title: "Overview",
           url: "#",
           icon: "Loader2Icon", // Save icon as a string
         },

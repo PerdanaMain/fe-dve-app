@@ -42,7 +42,6 @@ export function LoginForm({ className, ...props }) {
       setIsloading(!isLoading);
 
       const response = await mutateAsync(data);
-      console.log(response)
       secureLocalStorage.setItem(STORAGE_KEY, response.data);
 
       navigate("/dashboard");
@@ -64,7 +63,7 @@ export function LoginForm({ className, ...props }) {
       <Toaster />
       <Card className="w-full max-w-sm shadow-lg">
         <CardHeader className="flex flex-col items-center gap-2">
-          <img src="/assets/logo.jpeg" alt="logo" className="w-28 h-28 rounded-full" />
+          <img src="/assets/logo.jpeg" alt="logo" className="w-24 h-24 rounded-full" />
           <CardTitle className="text-lg font-semibold text-center">Data Center Validate Equipment</CardTitle>
           <CardDescription className="text-center text-xs">
             Login to your account
