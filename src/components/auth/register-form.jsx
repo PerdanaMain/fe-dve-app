@@ -47,13 +47,21 @@ const RegisterForm = ({ className, ...props }) => {
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div
+      className={cn(
+        "fixed inset-0 flex flex-col items-center justify-center bg-white",
+        className
+      )}
+      style={{ minHeight: "100vh", minWidth: "100vw", overflow: "hidden" }}
+      {...props}
+    >
       <Toaster />
-      <Card>
-        <CardHeader>
-          <CardTitle>Equipment Validate System</CardTitle>
-          <CardDescription>
-            Fill this fieldset to register into system
+     <Card className="w-full max-w-sm shadow-lg">
+        <CardHeader className="flex flex-col items-center gap-2">
+          <img src="/assets/logo.jpeg" alt="logo" className="w-28 h-28 rounded-full" />
+          <CardTitle className="text-lg font-semibold text-center">Data Center Validate Equipment</CardTitle>
+          <CardDescription className="text-center text-xs">
+             Fill this fieldset to register into system
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -133,7 +141,7 @@ const RegisterForm = ({ className, ...props }) => {
               </div>
             </div>
             <div className="mt-4 text-center text-sm">
-              Already have an account? {" "}
+              Already have an account?{" "}
               <a href="/" className="underline underline-offset-4">
                 sign in
               </a>

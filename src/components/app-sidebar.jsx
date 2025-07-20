@@ -12,146 +12,29 @@ import {
 } from "./ui/sidebar";
 
 // This is sample data.
-const data = {
-  versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
-  navMain: [
-    {
-      title: "Getting Started",
-      url: "#",
-      items: [
-        {
-          title: "Installation",
-          url: "#",
-        },
-        {
-          title: "Project Structure",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Building Your Application",
-      url: "#",
-      items: [
-        {
-          title: "Routing",
-          url: "#",
-        },
-        {
-          title: "Data Fetching",
-          url: "#",
-          isActive: true,
-        },
-        {
-          title: "Rendering",
-          url: "#",
-        },
-        {
-          title: "Caching",
-          url: "#",
-        },
-        {
-          title: "Styling",
-          url: "#",
-        },
-        {
-          title: "Optimizing",
-          url: "#",
-        },
-        {
-          title: "Configuring",
-          url: "#",
-        },
-        {
-          title: "Testing",
-          url: "#",
-        },
-        {
-          title: "Authentication",
-          url: "#",
-        },
-        {
-          title: "Deploying",
-          url: "#",
-        },
-        {
-          title: "Upgrading",
-          url: "#",
-        },
-        {
-          title: "Examples",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "API Reference",
-      url: "#",
-      items: [
-        {
-          title: "Components",
-          url: "#",
-        },
-        {
-          title: "File Conventions",
-          url: "#",
-        },
-        {
-          title: "Functions",
-          url: "#",
-        },
-        {
-          title: "next.config.js Options",
-          url: "#",
-        },
-        {
-          title: "CLI",
-          url: "#",
-        },
-        {
-          title: "Edge Runtime",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Architecture",
-      url: "#",
-      items: [
-        {
-          title: "Accessibility",
-          url: "#",
-        },
-        {
-          title: "Fast Refresh",
-          url: "#",
-        },
-        {
-          title: "Next.js Compiler",
-          url: "#",
-        },
-        {
-          title: "Supported Browsers",
-          url: "#",
-        },
-        {
-          title: "Turbopack",
-          url: "#",
-        },
-      ],
-    },
-  ],
-};
+import { sidebarList } from "../lib/sidebar-list";
 
 export function AppSidebar({ ...props }) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <p>Sidebar Header</p>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <img
+            src="https://staticxl.ext.xlaxiata.co.id/s3fs-public/xlfavicon.png"
+            alt="App Logo"
+          />
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <span style={{ fontWeight: 600, fontSize: 18, lineHeight: 1.2 }}>
+              SNB Docs
+            </span>
+            <span style={{ fontSize: 12, color: "#888" }}>
+              Your trusted IT practitioner guide
+            </span>
+          </div>
+        </div>
       </SidebarHeader>
       <SidebarContent>
-        {/* We create a SidebarGroup for each parent. */}
-        {data.navMain.map((item) => (
+        {sidebarList.navMain.map((item) => (
           <SidebarGroup key={item.title}>
             <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -159,7 +42,18 @@ export function AppSidebar({ ...props }) {
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={item.isActive}>
-                      <a href={item.url}>{item.title}</a>
+                      <a href={item.url}>
+                        <span
+                          style={{
+                            marginRight: 8,
+                            display: "inline-flex",
+                            alignItems: "center",
+                          }}
+                        >
+                         
+                        </span>
+                        {item.title}
+                      </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
