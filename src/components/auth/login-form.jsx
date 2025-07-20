@@ -28,6 +28,7 @@ export function LoginForm({ className, ...props }) {
   const {
     register: formLogin,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(loginSchema),
@@ -43,7 +44,8 @@ export function LoginForm({ className, ...props }) {
 
       const response = await mutateAsync(data);
       secureLocalStorage.setItem(STORAGE_KEY, response.data);
-
+      
+      reset(); // Reset form after successful login
       navigate("/dashboard");
     } catch (error) {
       setIsloading(false);

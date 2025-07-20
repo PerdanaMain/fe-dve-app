@@ -19,36 +19,38 @@ import {
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu";
 
-import { sidebarList } from "../lib/sidebar-list";
-import { User2, ChevronUp } from "lucide-react";
-import { useEffect, useState } from "react";
-import secureLocalStorage from "react-secure-storage";
-import { STORAGE_KEY } from "../utils/env";
 import { useMutation } from "@tanstack/react-query";
-import { verifyUser } from "../services/auth.service";
+import { ChevronUp, Loader2, User2 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import secureLocalStorage from "react-secure-storage";
+import { sidebarList } from "../lib/sidebar-list";
+import { verifyUser } from "../services/auth.service";
+import { STORAGE_KEY } from "../utils/env";
+import { useEffect } from "react";
 
 export function AppSidebar({ ...props }) {
-  const [userData, setUserData] = useState({});
-  const token = secureLocalStorage.getItem(STORAGE_KEY);
-  const { mutateAsync } = useMutation({
+  const navigate = useNavigate();
+
+  const {
+    data: userData,
+    isSuccess,
+    mutateAsync,
+  } = useMutation({
     mutationFn: (data) => verifyUser(data),
   });
-  const navigate = useNavigate();
+
   useEffect(() => {
     async function fetchData() {
-      const response = await mutateAsync(token);
-      setUserData(response.data);
+      const token = secureLocalStorage.getItem(STORAGE_KEY);
+      await mutateAsync(token);
     }
     fetchData();
-  }, [mutateAsync, token]);
+  }, [mutateAsync]);
 
   const handleLogout = () => {
     try {
-      console.log("Logout in procces");
       secureLocalStorage.removeItem(STORAGE_KEY);
-
       toast.success("You are fully logged out!");
       navigate("/");
     } catch (error) {
@@ -108,7 +110,17 @@ export function AppSidebar({ ...props }) {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> {!userData ? "..." : userData.username}
+                  {!isSuccess ? (
+                    <>
+                      <Loader2 />
+                      Loading...
+                    </>
+                  ) : (
+                    <>
+                      <User2 />
+                      {userData.data.username}
+                    </>
+                  )}
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>

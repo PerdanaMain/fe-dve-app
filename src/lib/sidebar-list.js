@@ -16,8 +16,8 @@ export const sidebarList = {
       url: "#",
       items: [
         {
-          title: "Users",
-          url: "#",
+          title: "Registered Users",
+          url: "/registered-users",
           icon: "user-icon", // Save icon as a string
         },
       ],
