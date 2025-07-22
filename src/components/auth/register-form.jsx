@@ -40,6 +40,7 @@ const RegisterForm = ({ className, ...props }) => {
 
       await mutateAsync();
       toast.success("Register succesfully, wait for admin approve!");
+      setIsloading(false);
     } catch (error) {
       setIsloading(false);
       toast.error(error.response.data.message);
@@ -56,12 +57,18 @@ const RegisterForm = ({ className, ...props }) => {
       {...props}
     >
       <Toaster />
-     <Card className="w-full max-w-sm shadow-lg">
+      <Card className="w-full max-w-sm shadow-lg">
         <CardHeader className="flex flex-col items-center gap-2">
-          <img src="/assets/logo.jpeg" alt="logo" className="w-28 h-28 rounded-full" />
-          <CardTitle className="text-lg font-semibold text-center">Data Center Validate Equipment</CardTitle>
+          <img
+            src="/assets/logo.jpeg"
+            alt="logo"
+            className="w-28 h-28 rounded-full"
+          />
+          <CardTitle className="text-lg font-semibold text-center">
+            Data Center Validate Equipment
+          </CardTitle>
           <CardDescription className="text-center text-xs">
-             Fill this fieldset to register into system
+            Fill this fieldset to register into system
           </CardDescription>
         </CardHeader>
         <CardContent>

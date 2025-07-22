@@ -12,7 +12,7 @@ import {
   ArrowUpDown,
   CheckCircle,
   ChevronDown,
-  MoreHorizontal
+  MoreHorizontal,
 } from "lucide-react";
 import * as React from "react";
 
@@ -67,26 +67,31 @@ const RegisteredUserDataTable = ({ data, mutate }) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const nextActivate = !data.isActive;
-        const loadingToast = toast.loading("Processing...");
-        try {
-          const updated = await mutateAsync(
+        toast.promise(
+          mutateAsync(
             { id: data.id, activate: nextActivate ? "true" : "false" },
             token
-          );
-          toast.success(
-            `User "${data.username}" has been ${
-              updated.isActive ? "activated" : "deactivated"
-            }.`,
-            {
-              id: loadingToast,
-              duration: 2000,
+          ).then((updated) => {
+            mutate(token); // refresh data if needed
+            return updated;
+          }),
+          {
+            loading: "Please wait...",
+            success: () =>
+              `User "${data.username}" has been ${
+                nextActivate ? "activated" : "deactivated"
+              }.`,
+            error: (err) => `${err.toString()}`,
+          },
+          {
+            style: {
+              minWidth: "250px",
+            },
+            success: {
               icon: "🔥",
-            }
-          );
-          mutate(token); // refresh data if needed
-        } catch (err) {
-          toast.error(`${err.toString()}`, { id: loadingToast });
-        }
+            },
+          }
+        );
       }
     });
   };

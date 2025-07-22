@@ -20,14 +20,15 @@ import {
 } from "../components/ui/dropdown-menu";
 
 import { useMutation } from "@tanstack/react-query";
-import { ChevronUp, Loader2, User2 } from "lucide-react";
+import { ChevronUp, User2 } from "lucide-react";
+import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
+import { Skeleton } from "../components/ui/skeleton";
 import { sidebarList } from "../lib/sidebar-list";
 import { verifyUser } from "../services/auth.service";
 import { STORAGE_KEY } from "../utils/env";
-import { useEffect } from "react";
 
 export function AppSidebar({ ...props }) {
   const navigate = useNavigate();
@@ -111,10 +112,12 @@ export function AppSidebar({ ...props }) {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
                   {!isSuccess ? (
-                    <>
-                      <Loader2 />
-                      Loading...
-                    </>
+                    <div className="flex items-center space-x-4">
+                      <Skeleton className="h-12 w-12 rounded-full" />
+                      <div className="space-y-2">
+                        <Skeleton className="h-4 w-[250px]" />
+                      </div>
+                    </div>
                   ) : (
                     <>
                       <User2 />
