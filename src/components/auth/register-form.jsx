@@ -25,6 +25,7 @@ const RegisterForm = ({ className, ...props }) => {
     register: formRegistration,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: zodResolver(registerSchema),
   });
@@ -39,8 +40,9 @@ const RegisterForm = ({ className, ...props }) => {
       setRegistrationData(data);
 
       await mutateAsync();
-      toast.success("Register succesfully, wait for admin approve!");
       setIsloading(false);
+      reset();
+      toast.success("Register succesfully, wait for admin approve!");
     } catch (error) {
       setIsloading(false);
       toast.error(error.response.data.message);

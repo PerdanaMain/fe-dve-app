@@ -12,13 +12,13 @@ export const sidebarList = {
         },
         {
           title: "Equipments",
-          url: "/equipment",
+          url: "/equipments",
           icon: "Loader2Icon", // Save icon as a string
           role: ["Admin", "User"],
         },
         {
           title: "Maintenance Report",
-          url: "/maintenance-report",
+          url: "#",
           icon: "Loader2Icon", // Save icon as a string
           role: ["Admin", "User"],
         },

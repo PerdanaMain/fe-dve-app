@@ -12,7 +12,6 @@ import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "../ui/button";
-import { Checkbox } from "../ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -34,126 +33,43 @@ import {
 
 const data = [
   {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@example.com",
+    id: "c1fabd1a-ae33-4bb2-b625-990988313473",
+    hostname: "SERVER-XL0701-PS-1701",
+    brand: "CISCO",
+    type: "RXXX Type B 17",
+    serialnumber: "XXX-017-01",
+    function: "SWITCH",
+    category: "FIREWALL",
+    group: "IT",
+    createdAt: "2025-07-22T07:11:28.134Z",
+    updatedAt: "2025-07-22T07:11:28.134Z",
+    maintenances: [],
   },
   {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@example.com",
+    id: "09071fba-a507-4f8e-9fa0-1053d8270c25",
+    hostname: "FIREWALL-XL07-PS-87",
+    brand: "DELLEMC",
+    type: "RXXX Type B 87",
+    serialnumber: "XXX-087",
+    function: "FIREWALL",
+    category: "FIREWALL",
+    group: "IN",
+    createdAt: "2025-07-22T04:48:25.138Z",
+    updatedAt: "2025-07-22T04:48:25.138Z",
+    maintenances: [],
   },
   {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@example.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@example.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@example.com",
-  },
-];
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const columns = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-  },
-  {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
-
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    id: "0939f44f-ba90-49ca-8d57-5b869210dfa5",
+    hostname: "DISCOVERY-XL07-PS-79",
+    brand: "DELLEMC",
+    type: "RXXX Type B 79",
+    serialnumber: "XXX-079",
+    function: "DISCOVERY",
+    category: "DISCOVERY",
+    group: "CORE",
+    createdAt: "2025-07-22T04:48:25.138Z",
+    updatedAt: "2025-07-22T04:48:25.138Z",
+    maintenances: [],
   },
 ];
 
@@ -162,6 +78,109 @@ export function DataTableEquipment() {
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+  const columns = [
+    {
+      accessorKey: "hostname",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="-ml-3"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Hostname
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("hostname")}</div>
+      ),
+    },
+    {
+      accessorKey: "serialnumber",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="-ml-3"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Serial Number
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="uppercase">{row.getValue("serialnumber")}</div>
+      ),
+    },
+    {
+      accessorKey: "brand",
+      header: "Brand",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("brand")}</div>
+      ),
+    },
+    {
+      accessorKey: "type",
+      header: "Type",
+      cell: ({ row }) => (
+        <div className="uppercase">{row.getValue("type")}</div>
+      ),
+    },
+    {
+      accessorKey: "function",
+      header: "Function",
+      cell: ({ row }) => (
+        <div className="uppercase">{row.getValue("function")}</div>
+      ),
+    },
+    {
+      accessorKey: "category",
+      header: "Category",
+      cell: ({ row }) => (
+        <div className="uppercase">{row.getValue("category")}</div>
+      ),
+    },
+    {
+      accessorKey: "group",
+      header: "Group",
+      cell: ({ row }) => (
+        <div className="uppercase">{row.getValue("group")}</div>
+      ),
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const payment = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(payment.id)}
+              >
+                Copy payment ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>View customer</DropdownMenuItem>
+              <DropdownMenuItem>View payment details</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
 
   const table = useReactTable({
     data,
@@ -186,10 +205,10 @@ export function DataTableEquipment() {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter emails..."
-          value={table.getColumn("email")?.getFilterValue() ?? ""}
+          placeholder="Filter hostname..."
+          value={table.getColumn("hostname")?.getFilterValue() ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("hostname")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -271,10 +290,6 @@ export function DataTableEquipment() {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="text-muted-foreground flex-1 text-sm">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
         <div className="space-x-2">
           <Button
             variant="outline"

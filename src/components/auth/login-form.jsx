@@ -44,7 +44,7 @@ export function LoginForm({ className, ...props }) {
 
       const response = await mutateAsync(data);
       secureLocalStorage.setItem(STORAGE_KEY, response.data);
-      
+
       reset(); // Reset form after successful login
       navigate("/dashboard");
     } catch (error) {
@@ -65,16 +65,24 @@ export function LoginForm({ className, ...props }) {
       <Toaster />
       <Card className="w-full max-w-sm shadow-lg">
         <CardHeader className="flex flex-col items-center gap-2">
-          <img src="/assets/logo.jpeg" alt="logo" className="w-24 h-24 rounded-full" />
-          <CardTitle className="text-lg font-semibold text-center">Data Center Validate Equipment</CardTitle>
+          <img
+            src="/assets/logo.jpeg"
+            alt="logo"
+            className="w-16 h-16 rounded-full"
+          />
+          <CardTitle className="text-lg font-semibold text-center">
+            Data Center Validate Equipment
+          </CardTitle>
           <CardDescription className="text-center text-xs">
-            Login to your account
+            For Surabaya Network Building teams only, login to your account
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
-              <Label htmlFor="username" className="text-xs">Username</Label>
+              <Label htmlFor="username" className="text-xs">
+                Username
+              </Label>
               <Input
                 id="username"
                 type="text"
@@ -89,7 +97,9 @@ export function LoginForm({ className, ...props }) {
               )}
             </div>
             <div>
-              <Label htmlFor="password" className="text-xs">Password</Label>
+              <Label htmlFor="password" className="text-xs">
+                Password
+              </Label>
               <Input
                 id="password"
                 type="password"
