@@ -17,3 +17,12 @@ export const postEquipment = async (data, token) =>
       },
     })
     .then((res) => res.data);
+
+export const putEquipment = async (id, data, token) =>
+  await apiInstance
+    .put(`/equipment/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => res.data);

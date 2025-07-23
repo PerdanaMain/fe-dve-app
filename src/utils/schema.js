@@ -24,8 +24,8 @@ export const userUpdateSchema = z.object({
 export const formEquipment = z.object({
   hostname: z.string().min(1, "Hostname is required"),
   serialnumber: z.string().min(1, "Serial number is required"),
-  brand: z.string(),
-  type: z.string(),
+  brand: z.string().min(1, "Brand number is required"),
+  type: z.string().min(1, "Type number is required"),
   function: z.string("Function is required!"),
   category: z.string("Category is required!"),
   group: z.string("Group is required!"),
