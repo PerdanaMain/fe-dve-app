@@ -9,13 +9,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  ArrowUpDown,
-  Check,
-  CheckCircle,
-  ChevronDown,
-  MoreHorizontal,
-} from "lucide-react";
+import { ArrowUpDown, Check, ChevronDown, MoreHorizontal } from "lucide-react";
 import * as React from "react";
 import { getEquipmentList } from "../../services/equipment.service";
 
@@ -47,9 +41,8 @@ import {
   PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "../ui/pagination";
+import FormEquipment from "./form-equipment";
 
 export function DataTableEquipment() {
   const [sorting, setSorting] = React.useState([]);
@@ -62,9 +55,7 @@ export function DataTableEquipment() {
 
   const {
     data: equipments,
-    mutateAsync,
     mutate,
-    isError,
     isPending,
   } = useMutation({
     mutationFn: () => getEquipmentList(page, limit, token),
@@ -271,7 +262,7 @@ export function DataTableEquipment() {
         <DropdownMenu>
           <div className="flex-1"></div>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto mr-1">
+            <Button variant="outline" className="mr-1">
               Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
@@ -297,7 +288,7 @@ export function DataTableEquipment() {
         </DropdownMenu>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline" className="mr-1">
               Row per page <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
@@ -315,6 +306,9 @@ export function DataTableEquipment() {
               );
             })}
           </DropdownMenuContent>
+        </DropdownMenu>
+        <DropdownMenu>
+          <FormEquipment type={"create"} equipmentMutate={mutate} />
         </DropdownMenu>
       </div>
       <div className="rounded-md border">

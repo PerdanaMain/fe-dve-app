@@ -8,3 +8,12 @@ export const getEquipmentList = async (page, limit, token) =>
       },
     })
     .then((res) => res.data);
+
+export const postEquipment = async (data, token) =>
+  await apiInstance
+    .post("/equipment/create", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => res.data);
