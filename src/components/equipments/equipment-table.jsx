@@ -1,5 +1,6 @@
 "use client";
 
+import { useMutation } from "@tanstack/react-query";
 import {
   flexRender,
   getCoreRowModel,
@@ -8,9 +9,18 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import {
+  ArrowUpDown,
+  Check,
+  CheckCircle,
+  ChevronDown,
+  MoreHorizontal,
+} from "lucide-react";
 import * as React from "react";
+import { getEquipmentList } from "../../services/equipment.service";
 
+import secureLocalStorage from "react-secure-storage";
+import { STORAGE_KEY } from "../../utils/env";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -31,53 +41,47 @@ import {
   TableRow,
 } from "../ui/table";
 
-const data = [
-  {
-    id: "c1fabd1a-ae33-4bb2-b625-990988313473",
-    hostname: "SERVER-XL0701-PS-1701",
-    brand: "CISCO",
-    type: "RXXX Type B 17",
-    serialnumber: "XXX-017-01",
-    function: "SWITCH",
-    category: "FIREWALL",
-    group: "IT",
-    createdAt: "2025-07-22T07:11:28.134Z",
-    updatedAt: "2025-07-22T07:11:28.134Z",
-    maintenances: [],
-  },
-  {
-    id: "09071fba-a507-4f8e-9fa0-1053d8270c25",
-    hostname: "FIREWALL-XL07-PS-87",
-    brand: "DELLEMC",
-    type: "RXXX Type B 87",
-    serialnumber: "XXX-087",
-    function: "FIREWALL",
-    category: "FIREWALL",
-    group: "IN",
-    createdAt: "2025-07-22T04:48:25.138Z",
-    updatedAt: "2025-07-22T04:48:25.138Z",
-    maintenances: [],
-  },
-  {
-    id: "0939f44f-ba90-49ca-8d57-5b869210dfa5",
-    hostname: "DISCOVERY-XL07-PS-79",
-    brand: "DELLEMC",
-    type: "RXXX Type B 79",
-    serialnumber: "XXX-079",
-    function: "DISCOVERY",
-    category: "DISCOVERY",
-    group: "CORE",
-    createdAt: "2025-07-22T04:48:25.138Z",
-    updatedAt: "2025-07-22T04:48:25.138Z",
-    maintenances: [],
-  },
-];
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../ui/pagination";
 
 export function DataTableEquipment() {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [page, setPage] = React.useState(1);
+  const [limit, setLimit] = React.useState(8);
+  const token = secureLocalStorage.getItem(STORAGE_KEY);
+
+  const {
+    data: equipments,
+    mutateAsync,
+    mutate,
+    isError,
+    isPending,
+  } = useMutation({
+    mutationFn: () => getEquipmentList(page, limit, token),
+  });
+
+  React.useEffect(() => {
+    mutate(page, limit, token);
+  }, [page, limit, token, mutate]);
+
+  const totalPages =
+    equipments && equipments.meta ? equipments.meta.totalPages : 1;
+  const pageWindow = 5; // jumlah halaman yang ditampilkan
+  const startPage = Math.max(1, page - Math.floor(pageWindow / 2));
+  const endPage = Math.min(totalPages, startPage + pageWindow - 1);
+  const rowPerPage = [2, 5, 7, 10];
+
+  const adjustedStartPage = Math.max(1, endPage - pageWindow + 1);
 
   const columns = [
     {
@@ -182,6 +186,10 @@ export function DataTableEquipment() {
     },
   ];
 
+  const data = React.useMemo(() => {
+    return equipments && equipments.data ? equipments.data : [];
+  }, [equipments]);
+
   const table = useReactTable({
     data,
     columns,
@@ -201,6 +209,54 @@ export function DataTableEquipment() {
     },
   });
 
+  const handleNextPage = () => {
+    setPage(page + 1);
+  };
+  const handlePreviousPage = () => {
+    setPage(page - 1);
+  };
+
+  if (isPending) {
+    return (
+      <div className="w-full">
+        <div className="flex items-center py-4">
+          <div className="h-10 bg-gray-100 rounded w-1/3 animate-pulse" />
+          <div className="ml-auto h-10 bg-gray-100 rounded w-32 animate-pulse" />
+        </div>
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                {columns.map((col) => (
+                  <TableHead key={col.accessorKey || col.id}>
+                    <div className="h-4 bg-gray-100 rounded w-24 animate-pulse" />
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {[...Array(limit)].map((_, idx) => (
+                <TableRow key={idx}>
+                  {columns.map((col, cidx) => (
+                    <TableCell key={cidx}>
+                      <div className="h-4 bg-gray-100 rounded w-full animate-pulse" />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+        <div className="flex items-center justify-end space-x-2 py-4">
+          <div className="space-x-2">
+            <div className="h-8 w-20 bg-gray-100 rounded animate-pulse inline-block" />
+            <div className="h-8 w-16 bg-gray-100 rounded animate-pulse inline-block" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
@@ -213,8 +269,9 @@ export function DataTableEquipment() {
           className="max-w-sm"
         />
         <DropdownMenu>
+          <div className="flex-1"></div>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline" className="ml-auto mr-1">
               Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
@@ -236,6 +293,27 @@ export function DataTableEquipment() {
                   </DropdownMenuCheckboxItem>
                 );
               })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto">
+              Row per page <ChevronDown />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {rowPerPage.map((rowCount, index) => {
+              return (
+                <DropdownMenuItem
+                  key={index}
+                  className="capitalize cursor-pointer"
+                  onClick={() => setLimit(rowCount)}
+                >
+                  <span className="text-xm">{rowCount}</span>
+                  {limit === rowCount ? <Check /> : ""}
+                </DropdownMenuItem>
+              );
+            })}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -290,23 +368,77 @@ export function DataTableEquipment() {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="text-muted-foreground flex-1 text-sm">
+          showing {data.length} of {equipments && equipments.meta.total + " "}
+          equipment(s)
+        </div>
         <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={page === 1}
+                  onClick={handlePreviousPage}
+                >
+                  Previous
+                </Button>
+              </PaginationItem>
+
+              {/* First Page & Ellipsis */}
+              {adjustedStartPage > 1 && (
+                <>
+                  <PaginationItem>
+                    <PaginationLink onClick={() => setPage(1)}>
+                      1
+                    </PaginationLink>
+                  </PaginationItem>
+                  {adjustedStartPage > 2 && <PaginationEllipsis />}
+                </>
+              )}
+
+              {/* Dynamic Page Numbers */}
+              {Array.from(
+                { length: endPage - adjustedStartPage + 1 },
+                (_, idx) => adjustedStartPage + idx
+              ).map((pageNumber) => (
+                <PaginationItem key={pageNumber}>
+                  <PaginationLink
+                    href="#"
+                    isActive={page === pageNumber}
+                    onClick={() => setPage(pageNumber)}
+                  >
+                    {pageNumber}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+
+              {/* Last Page & Ellipsis */}
+              {endPage < totalPages && (
+                <>
+                  {endPage < totalPages - 1 && <PaginationEllipsis />}
+                  <PaginationItem>
+                    <PaginationLink onClick={() => setPage(totalPages)}>
+                      {totalPages}
+                    </PaginationLink>
+                  </PaginationItem>
+                </>
+              )}
+
+              {/* Next Button */}
+              <PaginationItem>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={page === totalPages}
+                  onClick={handleNextPage}
+                >
+                  Next
+                </Button>
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
       </div>
     </div>
