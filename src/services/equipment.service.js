@@ -26,3 +26,12 @@ export const putEquipment = async (id, data, token) =>
       },
     })
     .then((res) => res.data);
+
+export const deleteEquipment = async (id, token) =>
+  await apiInstance
+    .delete(`/equipment/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => res.data);
